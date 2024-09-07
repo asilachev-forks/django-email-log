@@ -37,6 +37,7 @@ class EmailAdmin(admin.ModelAdmin):
         "recipients",
         "subject",
         "body_formatted",
+        "html_message",
         "html_message_preview",
         "date_sent",
         "ok",
@@ -45,7 +46,30 @@ class EmailAdmin(admin.ModelAdmin):
         AttachmentInline,
     ]
     search_fields = ["subject", "body", "recipients"]
-    exclude = ["body", "html_message"]
+    exclude = ["body"]
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "from_email",
+                    "recipients",
+                    "subject",
+                    "body_formatted",
+                    "html_message_preview",
+                    "date_sent",
+                    "ok",
+                )
+            },
+        ),
+        (
+            "Plain HTML message",
+            {
+                "classes": ("collapse",),
+                "fields": ("html_message",),
+            }
+        ),
+    )
 
     def has_delete_permission(self, *args, **kwargs):
         return False
@@ -56,7 +80,7 @@ class EmailAdmin(admin.ModelAdmin):
     def html_message_preview(self, obj):
         if obj.html_message:
             return format_html(
-                '<iframe srcdoc="{}" width="800px" height="600px"></iframe>',
+                "<iframe style='border: 1px solid #e8e8e8' srcdoc='{}' width='800px' height='600px'></iframe>",
                 obj.html_message
             )
         else:
