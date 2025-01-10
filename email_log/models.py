@@ -47,6 +47,7 @@ class Attachment(models.Model):
     file = models.FileField(
         _("file"),
         upload_to=get_attachment_path,
+        max_length=200,
     )
     name = models.CharField(_("name"), max_length=255, help_text=_("filename"))
     email = models.ForeignKey(
