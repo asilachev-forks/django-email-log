@@ -89,9 +89,11 @@ class EmailAdmin(admin.ModelAdmin):
     html_message_preview.short_description = "HTML message"
 
     def body_formatted(self, obj):
+        if obj.html_message:
+            return "(See HTML preview below)"
         return linebreaksbr(obj.body)
 
-    body_formatted.short_description = "body"
+    body_formatted.short_description = "Body"
 
 
 admin.site.register(Email, EmailAdmin)
